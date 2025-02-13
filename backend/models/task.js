@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const TaskSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -8,16 +9,14 @@ const TaskSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    impotant: {
+    important: { 
         type: Boolean,
         default: false,
     },
     complete: {
         type: Boolean,
         default: false,
-    },
-    
-,timestamps: true   
-});
-module.exports = mongoose.model('Task', TaskSchema);    
-   
+    }
+}, { timestamps: true }); 
+
+module.exports = mongoose.model('Task', TaskSchema);
