@@ -1,79 +1,81 @@
 const router = require('express').Router();
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');    
+const jwt = require('jsonwebtoken');
 
-// sign-in API 
+// Sign-up API
 router.post("/sign-in", async (req, res) => {
-  try { 
-    const { username, email, password } = req.body; 
+    try {
+        const { username, email, password } = req.body;
 
-    if (!username) {
-        return res.status(400).json({ message: "Username is required" });
-    }
-    if (!email) {
-        return res.status(400).json({ message: "Email is required" });
-    }
-    if (!password || password.length < 6) { // password validation
-        return res.status(400).json({ message: "Password must be at least 6 characters long" });
-    }
-
-    const existingUser = await User.findOne({ username });
-    const existingEmail = await User.findOne({ email });
-
-    if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
-    }
-    if (username.length < 4) {
-        return res.status(400).json({ message: "Username must be at least 4 characters long" });
-    }
-    if (existingEmail) {
-        return res.status(400).json({ message: "Email already exists" });
-    } 
-    if (email.length < 5) {
-        return res.status(400).json({ message: "Email must be at least 5 characters long" });
-    }
-  
-    const hashPass =  await bcrypt.hash( req.body.password, 10);
-
-    const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashPass,
-    });
-
-    await newUser.save();
-    return res.status(200).json({ message: "User created successfully" });
-
-  } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Internal server error" }); 
-  }
-});
-
-//login API
-router.get("/login", async (req, res) => {
-    const { username, password } = req.body;
-    const existingUser = await User.findOne({ username: username });
-    if(!existingUser){
-        return res
-        .status(400)
-        .json({ message: "Invalid Credentials" });
-    }
-    bcrypt.compare(password, existingUser.password,( err, data) => {
-
-        if(data)
-        { 
-            const authClaims = [ { name: username },{jti: jwt.sign({}, "tcmTM" )}];
-            const token= jwt.sign({ authClaims }, "tcmTM", {expiresIn:'2d'});
-            res.status(200).json({ id: existingUser._id, token: token });   
-        }else{
-            return res
-            .status(400)
-            .json({ message:  "Invalid Credentials" });
+        if (!username || username.length < 4) {
+            return res.status(400).json({ message: "Username must be at least 4 characters long" });
+        }
+        if (!email || email.length < 5) {
+            return res.status(400).json({ message: "Valid email is required" });
+        }
+        if (!password || password.length < 6) {
+            return res.status(400).json({ message: "Password must be at least 6 characters long" });
         }
 
-    })
+        const existingUser = await User.findOne({ username });
+        const existingEmail = await User.findOne({ email });
+
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+        if (existingEmail) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
+
+        const hashPass = await bcrypt.hash(password, 10);
+
+        const newUser = new User({
+            username,
+            email,
+            password: hashPass,
+        });
+
+        await newUser.save();
+        return res.status(200).json({ message: "User created successfully" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 });
+
+// Login API (Fix: Changed from GET to POST, and ensured token includes user ID)
+router.post("/login", async (req, res) => {
+    try {
+        const { username, password } = req.body;
         
-module.exports = router;
+        // Check if user exists
+        const existingUser = await User.findOne({ username });
+        if (!existingUser) {
+            return res.status(400).json({ message: "Invalid Credentials" });
+        }
+
+        // Compare passwords
+        const isMatch = await bcrypt.compare(password, existingUser.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid Credentials" });
+        }
+
+        // Generate token with `userId`
+        const token = jwt.sign(
+            { userId: existingUser._id, username: existingUser.username }, 
+            "tcmTM",
+            { expiresIn: '2d' }
+        );
+
+        res.status(200).json({ userId: existingUser._id, token });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+module.exports = router; 
