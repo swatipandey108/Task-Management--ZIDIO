@@ -1,38 +1,54 @@
-import React from 'react';
+import React from "react";
 import { MdClose } from "react-icons/md";
 
 const InputData = ({ inputDiv, setInputDiv }) => {
   return (
     <>
       {/* Background Overlay */}
-      <div className={`${inputDiv} fixed top-0 left-0 bg-black opacity-50 h-screen w-full transition-opacity duration-300`} />
+      <div
+        className={`${inputDiv} fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300`}
+      />
 
       {/* Modal */}
-      <div className={`${inputDiv} fixed top-0 left-0 flex items-center justify-center h-screen w-full transition-transform duration-300`}>
-        <div className="w-2/6 bg-gradient-to-br from-purple-900 to-indigo-900 text-white p-6 rounded-xl shadow-2xl transform transition-all scale-95 hover:scale-100">
-          {/* Close button */}
+      <div
+        className={`${inputDiv} fixed inset-0 flex items-center justify-center transition-all duration-300`}
+      >
+        <div className="w-2/6 bg-gradient-to-br from-purple-800 to-indigo-900 text-white p-8 rounded-2xl shadow-2xl transform transition-all scale-95 hover:scale-100">
+          {/* Close Button */}
           <div className="flex justify-end">
-            <button className="text-2xl text-white hover:text-gray-300 transition-colors duration-200" onClick={() => setInputDiv("hidden")}>
+            <button
+              className="text-3xl text-white hover:text-gray-300 transition-colors duration-200"
+              onClick={() => setInputDiv("hidden")}
+            >
               <MdClose />
             </button>
           </div>
 
-          {/* Input fields */}
-          <input
-            type="text"
-            placeholder="Enter Task Title"
-            name="title"
-            className="px-4 py-3 rounded-lg w-full bg-purple-700 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 my-3 transition-all"
-          />
-          <textarea
-            name="description"
-            id="description"
-            cols="30"
-            rows="5"
-            placeholder="Enter Task Description..."
-            className="px-4 py-3 rounded-lg w-full bg-purple-700 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 my-3 transition-all"
-          ></textarea>
-          <button className="bg-purple-600 hover:bg-purple-500 text-white text-xl px-4 py-3 rounded-lg w-full font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+          {/* Title */}
+          <h2 className="text-2xl font-semibold text-center mb-4">
+            Add New Task
+          </h2>
+
+          {/* Input Fields */}
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Enter Task Title"
+              name="title"
+              className="w-full px-4 py-3 rounded-lg bg-purple-700 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all shadow-sm"
+            />
+            <textarea
+              name="description"
+              id="description"
+              cols="30"
+              rows="5"
+              placeholder="Enter Task Description..."
+              className="w-full px-4 py-3 rounded-lg bg-purple-700 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all shadow-sm"
+            ></textarea>
+          </div>
+
+          {/* Button */}
+          <button className="w-full mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-lg font-semibold px-4 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105">
             Add Task
           </button>
         </div>
