@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import AllTasks from "./pages/AllTasks";
 import ImportantTask from "./pages/ImportantTask";
@@ -7,11 +7,23 @@ import CompletedTask from "./pages/CompletedTask";
 import IncompletedTask from "./pages/IncompletedTask";
 import Login from "./pages/Login";  
 import SignUp from "./pages/Signup";
+import { useSelector } from "react-redux";  
 
 const App = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  
+  useEffect(() => {
+  if (isLoggedIn === false) {
+    navigate("/signup");
+  } 
+
+}, []);
+ 
+  
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-900 to-purple-700 text-white p-4">
-      <Router>
+      
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
@@ -25,7 +37,7 @@ const App = () => {
             <Route path="incompletedTask" element={<IncompletedTask />} />
           </Route>
         </Routes>
-      </Router>
+       
     </div>
   );
 };

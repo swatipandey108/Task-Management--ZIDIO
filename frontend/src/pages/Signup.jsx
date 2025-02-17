@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [Data, setData] = useState({
+    email: "",
+    username: "",
+    password: ""
+  });
 
+  const change = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...Data,
+      [name]: value
+    });
+  };
+
+  const submit =  async () => {
+    if (Data.username === "" && Data.email === "" && Data.password === "") {
+      alert("Please fill in all fields.");
+    } else {
+       const response= await axios.post("http://localhost:1000/api/v1/sign-in", Data);
+  };
+ 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-r from-purple-900 via-purple-950 to-black">
       <div className="relative w-96">
@@ -22,17 +40,20 @@ const Signup = () => {
           <input
             type="email"
             placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value = {Data.email}
+            onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
+            required
           />
 
           {/* Username Input */}
           <input
             type="text"
             placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            value = {Data.username}
+            onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
           />
 
@@ -40,21 +61,18 @@ const Signup = () => {
           <input
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value = {Data.password}
+            onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
           />
 
           <div className="w-full flex flex-col items-center mt-4">
             {/* Signup Button */}
             <button
-              disabled={!email || !username || !password}
-              className={`${
-                email && username && password
-                  ? "bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg hover:shadow-xl"
-                  : "bg-purple-700 cursor-not-allowed opacity-50"
-              } text-white text-lg font-semibold rounded-lg px-6 py-3 w-full transition-all duration-300 ease-in-out`}
-            >
+             className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg hover:shadow-xl text-white text-lg font-semibold rounded-lg px-6 py-3 w-full transition-all duration-300 ease-in-out"
+             onClick = {submit}
+             >
               Sign Up
             </button>
 
