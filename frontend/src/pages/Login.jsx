@@ -1,14 +1,47 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { authActions } from '../store/auth';
+import { useDispatch } from 'react-redux';
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [Data, setData] = useState({
+    username: "",
+    password: ""
+  });
+
+  const history = useNavigate(); 
+  const dispatch = useDispatch();
+
+  const change = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...Data,
+      [name]: value
+    });
+  };
+  
+  const submit = async () => {
+    try {
+      if (!Data.username || !Data.password) {
+        alert("Please fill in all fields.");
+      } else { 
+        const response = await axios.post("http://localhost:1000/api/v1/login", Data);
+        setData({ username: "", password: "" });
+        console(response);
+        localStorage.setItem("id", response.data.id);
+        localStorage.setItem("token", response.data.token);
+        dispatch(authActions.login());
+        history("/");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert(error.response?.data?.message || "Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-r from-purple-900 via-purple-950 to-black">
       <div className="relative w-96">
-        
         <div className="absolute inset-0 bg-black opacity-30 rounded-2xl"></div>
 
         <div className="relative bg-gradient-to-r from-purple-800 via-purple-900 to-black shadow-2xl rounded-2xl p-8 w-full text-center z-10 border border-purple-700">
@@ -20,8 +53,9 @@ const Login = () => {
           <input
             type="text"
             placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            value={Data.username} // Fixed value
+            onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
           />
 
@@ -29,17 +63,19 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={Data.password} // Fixed value
+            onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
           />
 
           <div className="w-full flex flex-col items-center mt-4">
             {/* Login Button */}
             <button
-              disabled={!username || !password}
+              disabled={!Data.username || !Data.password} // Fixed usage
+              onClick={submit} 
               className={`${
-                username && password
+                Data.username && Data.password
                   ? "bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg hover:shadow-xl"
                   : "bg-purple-700 cursor-not-allowed opacity-50"
               } text-white text-lg font-semibold rounded-lg px-6 py-3 w-full transition-all duration-300 ease-in-out`}

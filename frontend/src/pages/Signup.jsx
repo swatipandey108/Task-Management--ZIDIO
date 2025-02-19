@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'; 
+import { Link, useNavigate } from 'react-router-dom';  
 import axios from 'axios';
 
 const Signup = () => {
@@ -8,6 +8,8 @@ const Signup = () => {
     username: "",
     password: ""
   });
+  
+  const history = useNavigate();
 
   const change = (e) => {
     const { name, value } = e.target;
@@ -18,21 +20,23 @@ const Signup = () => {
   };
 
   const submit = async () => {
-    // Check if any field is empty
-    if (!Data.username || !Data.email || !Data.password) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
     try {
-      const response = await axios.post("http://localhost:1000/api/v1/signup", Data);
-      alert("Signup Successful!");
-      console.log(response.data);
+      // Check if any field is empty
+      if (!Data.username || !Data.email || !Data.password) {
+        alert("Please fill in all fields.");
+      } else { 
+        const response = await axios.post("http://localhost:1000/api/v1/signup", Data);
+        setData({ email: "", username: "", password: "" });
+        alert(response.data.message);
+        history("/login"); 
+      }
     } catch (error) {
       console.error("Error during signup:", error);
-      alert("Signup failed. Please try again.");
+      alert(error.response.data.message || "Signup failed. Please try again.");
+      
     }
   };
+  
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-r from-purple-900 via-purple-950 to-black">
