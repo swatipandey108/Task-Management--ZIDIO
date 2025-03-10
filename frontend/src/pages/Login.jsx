@@ -9,7 +9,7 @@ const Login = () => {
     password: ""
   });
 
-  const history = useNavigate(); 
+  const history = useNavigate();
   const dispatch = useDispatch();
 
   const change = (e) => {
@@ -27,7 +27,9 @@ const Login = () => {
       } else { 
         const response = await axios.post("http://localhost:1000/api/v1/login", Data);
         setData({ username: "", password: "" });
-        console(response);
+        console.log(typeof console);
+
+        console.log(response);
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("token", response.data.token);
         dispatch(authActions.login());
