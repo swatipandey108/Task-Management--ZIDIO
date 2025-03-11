@@ -26,7 +26,7 @@ const InputData = ({ inputDiv, setInputDiv }) => {
 
           {/* Title */}
           <h2 className="text-2xl font-semibold text-center mb-4">
-            Add New Task
+          Assign New Task
           </h2>
 
           {/* Input Fields */}
@@ -49,7 +49,7 @@ const InputData = ({ inputDiv, setInputDiv }) => {
 
           {/* Button */}
           <button className="w-full mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-lg font-semibold px-4 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105">
-            Add Task
+          Schedule Task
           </button>
         </div>
       </div>

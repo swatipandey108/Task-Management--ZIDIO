@@ -7,23 +7,23 @@ import { IoMdAdd } from "react-icons/io";
 const Cards = ({ home, setInputDiv }) => {
   const data = [
     {
-      title: 'Exam Preparation',
-      desc: "I want to study for my exam",
+      title: "📚 Exam Prep", 
+      desc: "Study for upcoming exam",
       status: "Incomplete",
     },
     {
-      title: 'Yoga',
-      desc: "I have to do yoga for my health",
+      title: "🧘 Yoga", 
+      desc: "Daily morning yoga session",
       status: "Complete",
     },
     {
-      title: 'Interview Preparation',
-      desc: "I have to prepare for my interview",
+      title: "Dance 💃", 
+      desc: "Attend my dance class",
       status: "Incomplete",
     },
     {
-      title: 'Dance',
-      desc: "I have to go to my dance class",
+      title: "Interview Prep 💼", 
+      desc: "Prepare for my interview",
       status: "Incomplete",
     }
   ];

@@ -8,7 +8,7 @@ const Sidebar = () => {
       
       {/* Sidebar Title */}
       <h1 className="text-3xl font-extrabold text-center mb-10 tracking-wider font-serif">
-        Zidio Task Manager
+      Task Control Panel
       </h1>
 
       {/* Centered Task List */}
@@ -17,28 +17,28 @@ const Sidebar = () => {
           to="/" 
           className="flex items-center gap-3 bg-purple-700 hover:bg-purple-600 transition-all duration-300 p-4 rounded-xl text-white text-lg font-medium tracking-wide shadow-md"
         >
-          <FaTasks /> Task List
+          <FaTasks /> Activity Log
         </Link>
 
         <Link 
           to="/completedTask" 
           className="flex items-center gap-3 bg-purple-700 hover:bg-purple-600 transition-all duration-300 p-4 rounded-xl text-white text-lg font-medium tracking-wide shadow-md"
         >
-          <FaCheckCircle /> Completed Task
+          <FaCheckCircle /> Accomplished Task
         </Link>
 
         <Link 
           to="/importantTask" 
           className="flex items-center gap-3 bg-purple-700 hover:bg-purple-600 transition-all duration-300 p-4 rounded-xl text-white text-lg font-medium tracking-wide shadow-md"
         >
-          <FaStar /> Important Task
+          <FaStar /> Top Task
         </Link>
 
         <Link 
           to="/incompletedTask" 
           className="flex items-center gap-3 bg-purple-700 hover:bg-purple-600 transition-all duration-300 p-4 rounded-xl text-white text-lg font-medium tracking-wide shadow-md"
         >
-          <FaTimesCircle /> Incomplete Task
+          <FaTimesCircle /> Ongoing Task
         </Link>
       </div>
 
