@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/api/v1", userAPI);
-// used for taking data when someone is logged in
+// using for taking data when someone is logged in
 // localhost:1000/api/v1/sign-in   
 
 app.use("/api/v2", taskAPI);
@@ -30,5 +30,7 @@ const PORT =  1000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
 
      

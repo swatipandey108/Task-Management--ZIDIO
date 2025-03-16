@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { authActions } from '../store/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';  
+
 const Login = () => {
   const [Data, setData] = useState({
     username: "",
     password: ""
   });
 
-  const history = useNavigate();
+  const navigate = useNavigate(); 
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/"); 
+    }
+  }, [isLoggedIn, navigate]);
 
   const change = (e) => {
     const { name, value } = e.target;
@@ -19,7 +27,7 @@ const Login = () => {
       [name]: value
     });
   };
-  
+
   const submit = async () => {
     try {
       if (!Data.username || !Data.password) {
@@ -27,13 +35,11 @@ const Login = () => {
       } else { 
         const response = await axios.post("http://localhost:1000/api/v1/login", Data);
         setData({ username: "", password: "" });
-        console.log(typeof console);
 
-        console.log(response);
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("token", response.data.token);
         dispatch(authActions.login());
-        history("/");
+        navigate("/"); 
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -56,9 +62,10 @@ const Login = () => {
             type="text"
             placeholder="Username"
             name="username"
-            value={Data.username} // Fixed value
+            value={Data.username}
             onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
+            required
           />
 
           {/* Password Input */}
@@ -66,16 +73,18 @@ const Login = () => {
             type="password"
             placeholder="Password"
             name="password"
-            value={Data.password} // Fixed value
+            value={Data.password}
             onChange={change}
             className="bg-purple-700 text-white rounded-lg px-4 py-3 my-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 border border-purple-600 transition-all duration-300 ease-in-out shadow-inner hover:shadow-lg"
+            required
           />
 
           <div className="w-full flex flex-col items-center mt-4">
             {/* Login Button */}
             <button
-              disabled={!Data.username || !Data.password} // Fixed usage
-              onClick={submit} 
+              type="button"
+              disabled={!Data.username || !Data.password}
+              onClick={submit}
               className={`${
                 Data.username && Data.password
                   ? "bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg hover:shadow-xl"

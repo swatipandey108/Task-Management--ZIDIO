@@ -1,44 +1,54 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "./store/auth";
 import Home from "./pages/Home";
 import AllTasks from "./pages/AllTasks";
 import ImportantTask from "./pages/ImportantTask";
 import CompletedTask from "./pages/CompletedTask";
 import IncompletedTask from "./pages/IncompletedTask";
-import Login from "./pages/Login";  
+import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
-import { useSelector, useDispatch } from "react-redux";  
 
 const App = () => {
   const navigate = useNavigate();
+  const location = useLocation(); 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-   const dispatch = useDispatch();
-   useEffect(() => {
-    if (localStorage.getItem("id") && localStorage.getItem("token")) {
-      dispatch(authActions.login());
-    } else if (!localStorage.getItem("id") && !localStorage.getItem("token")) {
-      navigate("/login");  // Redirect to login only if user is not logged in
-    }
-  }, [isLoggedIn, dispatch, navigate]);
+  const dispatch = useDispatch();
+
  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
+    if (token && id) {
+      dispatch(authActions.login({ token, id }));
+    }
+  }, [dispatch]);
+
   
+  useEffect(() => {
+    if (!isLoggedIn && location.pathname !== "/signup" && location.pathname !== "/login") {
+      navigate("/signup", { replace: true });
+    }
+  }, [isLoggedIn, navigate, location]);
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-900 to-purple-700 text-white p-4">
-      
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
 
-          {/* Protected Routes */}
+        {/* Protected Routes */}
+        {isLoggedIn && (
           <Route path="/" element={<Home />}>
             <Route index element={<AllTasks />} />
             <Route path="completedTask" element={<CompletedTask />} />
             <Route path="importantTask" element={<ImportantTask />} />
             <Route path="incompletedTask" element={<IncompletedTask />} />
           </Route>
-        </Routes>
-       
+        )}
+      </Routes>
     </div>
   );
 };
