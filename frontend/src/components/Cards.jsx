@@ -1,67 +1,47 @@
-import React from 'react';
+import React from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { IoMdAdd } from "react-icons/io";
 
-const Cards = ({ home, setInputDiv }) => {
-  const data = [
-    {
-      title: "📚 Exam Prep", 
-      desc: "Study for upcoming exam",
-      status: "Incomplete",
-    },
-    {
-      title: "🧘 Yoga", 
-      desc: "Daily morning yoga session",
-      status: "Complete",
-    },
-    {
-      title: "Dance 💃", 
-      desc: "Attend my dance class",
-      status: "Incomplete",
-    },
-    {
-      title: "Interview Prep 💼", 
-      desc: "Prepare for my interview",
-      status: "Incomplete",
-    }
-  ];
-
+const Cards = ({ setInputDiv, Data }) => {
   return (
-    <div className="grid grid-cols-3 gap-6 p-6">
-      {data.map((items, i) => (
-        <div key={i} className="flex flex-col justify-between bg-purple-200 shadow-lg rounded-xl p-6 transition-transform duration-300 hover:scale-105">
-          <div>
-            <h3 className="text-purple-900 text-2xl font-bold">{items.title}</h3>
-            <p className="text-gray-700 my-3 text-lg">{items.desc}</p>
-          </div>
-          <div className="mt-4 w-full flex items-center justify-between">
-            <button className={`${items.status === 'Incomplete' ? 'bg-red-500' : 'bg-green-500'} text-white py-2 px-4 rounded-lg font-semibold`}>
-              {items.status}
-            </button>
-            <div className="text-purple-800 text-2xl flex gap-4">
-              <button className="hover:text-purple-600 transition-colors duration-200">
-                <CiHeart />
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+      {Data && Data.length > 0 ? (
+        Data.map((items, i) => (
+          <div
+            key={i}
+            className="flex flex-col justify-between bg-purple-300 shadow-lg rounded-xl p-6 transition-transform duration-300 hover:scale-105"
+          >
+            <div>
+              <h3 className="text-purple-900 text-2xl font-bold">{items.title}</h3>
+              <p className="text-gray-800 my-3 text-lg">{items.desc}</p>
+            </div>
+            <div className="mt-4 w-full flex items-center justify-between">
+              <button
+                className={`${
+                  items.status.toLowerCase() === "complete" ? "bg-green-600" : "bg-red-500"
+                } text-white py-2 px-4 rounded-lg font-semibold`}
+              >
+                {items.status.toLowerCase() === "complete" ? "Completed" : "Incomplete"}
               </button>
-              <button className="hover:text-purple-600 transition-colors duration-200">
-                <FaRegEdit />
-              </button>
-              <button className="hover:text-purple-600 transition-colors duration-200">
-                <MdDelete />
-              </button>
+              <div className="text-purple-800 text-2xl flex gap-4">
+                <button className="hover:text-purple-600 transition-colors duration-200">
+                  <CiHeart />
+                </button>
+                <button className="hover:text-purple-600 transition-colors duration-200">
+                  <FaRegEdit />
+                </button>
+                <button className="hover:text-purple-600 transition-colors duration-200">
+                  <MdDelete />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-      {home === "true" && (
-        <button
-          className="flex flex-col justify-center items-center text-purple-900 bg-purple-300 shadow-lg rounded-xl p-6 hover:scale-105 transition-transform duration-300"
-          onClick={() => setInputDiv("fixed")}
-        >
-          <IoMdAdd className="text-6xl" />
-          <h2 className="font-bold mt-4 text-xl"> Add More Task!</h2>
-        </button>
+        ))
+      ) : (
+        <h3 className="text-white text-center text-2xl col-span-full">
+          No Tasks Found ❌
+        </h3>
       )}
     </div>
   );

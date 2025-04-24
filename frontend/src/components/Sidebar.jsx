@@ -14,7 +14,7 @@ const Sidebar = () => {
   // Logout Function
   const logout = () => {
     dispatch(authActions.logout());
-    localStorage.removeItem("id");
+    localStorage.removeItem("id");   
     localStorage.removeItem("token");
     navigate("/signup");
   };
@@ -55,7 +55,7 @@ const Sidebar = () => {
           <FaCheckCircle /> Accomplished Task
         </Link>
         <Link to="/importantTask" className="flex items-center gap-3 bg-purple-700 hover:bg-purple-600 transition-all duration-300 p-4 rounded-xl text-white text-lg font-medium tracking-wide shadow-md">
-          <FaStar /> Top Task
+          <FaStar /> Priority Tasks
         </Link>
         <Link to="/incompletedTask" className="flex items-center gap-3 bg-purple-700 hover:bg-purple-600 transition-all duration-300 p-4 rounded-xl text-white text-lg font-medium tracking-wide shadow-md">
           <FaTimesCircle /> Ongoing Task
